@@ -59,7 +59,7 @@ client.connect((err) => {
         console.error(err);
       } else {
         console.log("result", result);
-        res.redirect("/");
+        res.send(result.deletedCount > 0);
       }
     });
   });
@@ -92,6 +92,7 @@ client.connect((err) => {
 
 // const __dirname = path.resolve();
 
+//send html file
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });

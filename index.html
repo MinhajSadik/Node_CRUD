@@ -26,14 +26,15 @@
           .then((products) => {
             console.log(products);
             const container = document.getElementById("products");
+            container.innerHTML = "";
             products.map((product) => {
               const td = document.createElement("p");
               td.innerHTML = `
-            <b>${product.name}</b>
-            <b>${product.age}</b>
-            <b>${product.height}</b>
-            <b>${product.id}</b>
-            <button onclick="deleteProduct('${product._id}')">Delete</button>
+            <b>Name:${product.name} -</b>
+            <b>Age:${product.age} -</b>
+            <b>Height:${product.height} -</b>
+            <b>ID:${product.id} =</b>
+            <button onclick="deleteProduct(event,'${product._id}')">Delete</button>
             <button onclick="loadProduct('${product._id}')">Update/Edit</button>
             <br/>
             `;
@@ -60,26 +61,26 @@
           });
       }
 
-      function deleteProduct(id) {
+      function deleteProduct(event, id) {
         fetch(`/delete/${id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
           .then((result) => {
-            console.log("deleted successfully", result);
+            if (result) {
+              event.target.parentNode.style.display = "none";
+            }
           });
       }
+
+      //loadAllProducts
+      loadAllProducts();
 
       function updateProduct(id) {
         const name = document.getElementById("name").value;
         const age = document.getElementById("age").value;
         const height = document.getElementById("height").value;
-        const product = {
-          name,
-          age,
-          height,
-        };
-
+        const product = { name, age, height };
         fetch(`/update/${id}`, {
           method: "PATCH",
           headers: {
@@ -89,10 +90,13 @@
         })
           .then((res) => res.json())
           .then((result) => {
-            console.log("updated successfully", result);
+            if (result) {
+              loadAllProducts();
+              const update = document.getElementById("update");
+              update.innerHTML = " ";
+            }
           });
       }
-      loadAllProducts();
     </script>
   </body>
 </html>
