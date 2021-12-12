@@ -13,6 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Connection URL from ./DB/DBManager.js
 // DBConnection();
 
 const DB_URI = process.env.DB_URL;
