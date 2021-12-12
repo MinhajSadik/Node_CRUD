@@ -49,7 +49,13 @@
             console.log(product);
             const update = document.getElementById("update");
             update.innerHTML = `
-            
+            Name: <input type="text" name="name" value="${product.name}" id="name" />
+            <br>
+            Age: <input type="text" name="age" value="${product.age}" id="age" />
+            <br>
+            Height: <input type="text" name="height" value="${product.height}" id="height" />
+            <br>
+            <button onclick="updateProduct('${product._id}')"> Submit </button>
             `;
           });
       }
@@ -60,7 +66,30 @@
         })
           .then((res) => res.json())
           .then((result) => {
-            console.log("deleted successfully");
+            console.log("deleted successfully", result);
+          });
+      }
+
+      function updateProduct(id) {
+        const name = document.getElementById("name").value;
+        const age = document.getElementById("age").value;
+        const height = document.getElementById("height").value;
+        const product = {
+          name,
+          age,
+          height,
+        };
+
+        fetch(`/update/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(product),
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            console.log("updated successfully", result);
           });
       }
       loadAllProducts();

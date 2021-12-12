@@ -24,12 +24,14 @@ const client = new MongoClient(DB_URI, options);
 client.connect((err) => {
   const collection = client.db("Node_CRUD").collection("products");
 
+  //loadAllProducts
   app.get("/products", (req, res) => {
     collection.find({}).toArray((err, docs) => {
       res.send(docs);
     });
   });
 
+  //loadProductForUpdate
   app.get("/product/:id", (req, res) => {
     collection.find({ _id: ObjectId(req.params.id) }).toArray((err, docs) => {
       res.send(docs[0]);
@@ -60,6 +62,30 @@ client.connect((err) => {
         res.redirect("/");
       }
     });
+  });
+
+  //updateProduct
+  app.patch("/update/:id", (req, res) => {
+    collection.updateOne(
+      {
+        _id: ObjectId(req.params.id),
+      },
+      {
+        $set: {
+          name: req.body.name,
+          age: req.body.age,
+          height: req.body.height,
+        },
+      },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("result", result);
+          res.redirect("/");
+        }
+      }
+    );
   });
   console.log("Database Connected...");
 });
